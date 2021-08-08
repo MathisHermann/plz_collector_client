@@ -1,4 +1,4 @@
-import tkFont
+import tkinter.font as tkfont
 
 from tkinter import *
 import datetime
@@ -8,8 +8,8 @@ tkWindow.geometry('800x480')
 tkWindow.title('PythonExamples.org - Tkinter Example')
 # tkWindow.configure(bg='black')
 
-font_bold = tkFont.Font(family="Arial", size=50, weight="bold")
-font = tkFont.Font(family="Arial", size=50)
+font_bold = tkfont.Font(family="Arial", size=50, weight="bold")
+font = tkfont.Font(family="Arial", size=50)
 
 postal_code = []
 postal_code_var = StringVar()
