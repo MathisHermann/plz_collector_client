@@ -18,7 +18,7 @@ temp_file_name = "temp_plz.csv"
 perm_file_name = "perm_plz.csv"
 
 data_target_url = 'http://plzcollector.test/api/postal-codes'
-ENCRYPTION_KEY = b'JHmm0lZ0niP9_UiHIfEbBIeNW_RRzt98x2C0ByL9Yl4='
+ENCRYPTION_KEY = b'Encryption Key Goes Here :-D'
 
 tkWindow = Tk()
 tkWindow.geometry('800x480')
