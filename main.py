@@ -14,11 +14,13 @@ import requests
 import socket
 import threading
 
+safe_on_remote_server = True
+
+data_target_url = 'http://plz.bitwi.ch/api/postal-codes'
+ENCRYPTION_KEY = b'Encryption key goes here'
+
 temp_file_name = "temp_plz.csv"
 perm_file_name = "perm_plz.csv"
-
-data_target_url = 'http://plzcollector.test/api/postal-codes'
-ENCRYPTION_KEY = b'Encryption Key Goes Here :-D'
 
 tkWindow = Tk()
 tkWindow.geometry('800x480')
@@ -57,7 +59,7 @@ def save():
         del postal_code[:]
         set_text_on_label()
         num_lines = sum(1 for line in open(temp_file_name))
-        if internet() and num_lines >= 10:
+        if safe_on_remote_server and internet() and num_lines >= 10:
             send_thread = threading.Thread(target=send_data)
             send_thread.start()
 
@@ -93,7 +95,6 @@ def send_data():
 def entangle(line):
     line = line.strip('\n')
     line_parts = line.split(';')
-    print(line_parts)
     return '"' + line_parts[0] + '":{ "plz":' + line_parts[1] + ', "date_time": "' + line_parts[0] + '"}'
 
 
@@ -106,15 +107,12 @@ def post_data(send_codes):
             message += ','
         i += 1
     message += '}'
-    print(message)
     token = encrypt_data(message)
-    print(token)
     data = {
         "token": token,
     }
     data = json.dumps(data)
-    resp = requests.post('http://plzcollector.test/api/postal-codes', json=data)
-    print(resp.status_code)
+    resp = requests.post(data_target_url, json=data)
     return resp.status_code
 
 
@@ -125,7 +123,7 @@ def encrypt_data(message):
     token = token[2:len(token) - 1]
     return token
 
-def internet(host="8.8.8.8", port=53, timeout=3):
+def internet(host="8.8.8.8", port=53, timeout=5):
     """
     Host: 8.8.8.8 (google-public-dns-a.google.com)
     OpenPort: 53/tcp
@@ -136,7 +134,6 @@ def internet(host="8.8.8.8", port=53, timeout=3):
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
     except socket.error as ex:
-        print(ex)
         return False
 
 
